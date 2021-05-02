@@ -4,11 +4,13 @@ const express = require('express');
 const app=express();
 // Cargar los archivos y asignarles una ruta
 const UsuarioUrl=require('./urls/UsuarioUrl');
+const PublicacionUrl=require('./urls/PublicacionUrl');
 // Middleware lo que traduce la peticion a json
 app.use(express.urlencoded());
 app.use(express.json());
 // Cors permite que otras aplicaciones se conecten
 // Añadir los prefijos
-app.use('/',UsuarioUrl);
+app.use('/usuarios',UsuarioUrl);
+app.use('/publicaciones',PublicacionUrl);
 // Exportar los modulos
 module.exports=app;

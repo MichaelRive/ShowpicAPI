@@ -1,10 +1,9 @@
 const express= require('express');
 const UsuarioController = require('../controllers/UsuarioController');
 const router=express.Router();
-router.get('/datos',UsuarioController.datosusuarios);
-router.post('/save',UsuarioController.save);
-router.get('/list',UsuarioController.get_usuarios);
-router.get('/buscar/:id',UsuarioController.get_usuario_por_id);
-router.delete('/eliminar/:id',UsuarioController.delete_usuario);
-router.put('/actualizar/:id',UsuarioController.update_usuario);
+router.post('/guardar_usuario',UsuarioController.save);
+router.get('/listar_usuarios',UsuarioController.get_usuarios);
+router.get('/buscar_usuario/:id',UsuarioController.get_usuario_por_id);
+router.delete('/eliminar_usuario/:id',UsuarioController.delete_usuario);
+router.put('/actualizar_usuario/:id',UsuarioController.update_usuario);
 module.exports=router;

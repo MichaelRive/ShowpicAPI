@@ -1,16 +1,5 @@
-const validator = require('validator');
-const Usuario=require('../models/UsuarioModel');
+const Publicacion=require('../models/PublicacionModel');
 const controller={
-    datosusuarios:(req,res)=>{
-        console.log("Soy el controlador fiuuuuuu");
-        return res.status(200).send({
-            usuario: 'wenas',
-            correo: 'holamor@gmail.com',
-            contrasena: '12345',
-            nombre: 'Cristo Rey',
-            url_foto_perfil: 'hola.png'
-        })
-    },
     save:(req,res)=>{
         /*
         1. Recoger los datos
@@ -19,30 +8,31 @@ const controller={
         4. Guardar el objeto
         5. Se devuelve una respuesta
         */
-        const {usuario,correo,contrasena,nombre,url_foto_perfil}=req.body;
+        const {url,propietario,descripcion,tag,es_publico}=req.body;
         try {
-            if (usuario.length>0 && correo.length>0 && contrasena.length>0 && nombre.length>0 && validator.isEmail(correo)){
-                const UsuarioNuevo = new Usuario();
-                UsuarioNuevo.usuario=usuario;
-                UsuarioNuevo.correo=correo;
-                UsuarioNuevo.contrasena=contrasena;
-                UsuarioNuevo.nombre=nombre;
-                UsuarioNuevo.url_foto_perfil=url_foto_perfil;
-                UsuarioNuevo.save((err,usuario)=>{
+            if (url.length>0 && propietario.length>0 && descripcion.length>0 && tag.length>0 && es_publico!=null){
+                const PublicacionNuevo = new Publicacion();
+                PublicacionNuevo.url=url;
+                PublicacionNuevo.propietario=propietario;
+                PublicacionNuevo.descripcion=descripcion;
+                PublicacionNuevo.tag=tag;
+                PublicacionNuevo.es_publico=es_publico;
+                PublicacionNuevo.save((err,publicacion)=>{
                     if (err){
                         return res.status(400).send({
-                            status:'Usuario o correo ya registrado'
+                            status:'Error, contacte al administrador'
                         })
-                    } if (!usuario){
+                    } if (!publicacion){
                         return res.status(400).send({
                             status:'Faltan datos'
                         })
                     }else {
                         return res.status(200).send({
-                           status: 'Usuario registrado correctamente'
+                           status: 'Publicacion registrada correctamente'
                         })
                     }
                 })
+                
             } else {
                 return res.status(401).send({
                     status: 'Faltan datos'
@@ -54,22 +44,20 @@ const controller={
                 status: 'F'
             })
         }
-        
-       
     },
-    get_usuarios:(req,res)=>{
-        Usuario.find({}).sort('_id').exec((err,usuarios)=>{
+    get_publicaciones:(req,res)=>{
+        Publicacion.find({}).sort('_id').exec((err,publicaciones)=>{
             if(err){
                 return res.status(400).send({
-                    status: 'Error al buscar usuarios'
+                    status: 'Error al buscar la publicacion'
                 })
             }
             return res.status(200).send({
-                usuarios
+                publicaciones
             })
         })
     },
-    get_usuario_por_id:(req,res)=>{
+    get_publicacion_por_id:(req,res)=>{
         // Recoger el id de la URL
         const id=req.params.id;
         if (!id || id==null){
@@ -78,66 +66,66 @@ const controller={
             })
         } else {
              // Hacemos la busqueda
-            Usuario.findById(id,(err,usuario)=>{
+            Publicacion.findById(id,(err,publicacion)=>{
                 if(err){
                     return res.status(500).send({
-                        status: 'Usuario no encontrado'
+                        status: 'Publicacion no encontrada'
                     })
                 }
-                if (!usuario){
+                if (!publicacion){
                     return res.status(500).send({
-                        status: 'No existe el usuario'
+                        status: 'No existe la publicacion'
                     })
                 }
                 return res.status(200).send({
-                    status: 'Usuario encontrado',
-                    usuario
+                    status: 'Publicacion encontrada',
+                    publicacion
                 })
             })
         }
     },
-    delete_usuario:(req,res)=>{
+    delete_publicacion:(req,res)=>{
         const id=req.params.id;
         if (!id || id==null){
             return res.status(500).send({
                 status: 'Id no extraido correctamente'
             })
         } else {
-            Usuario.deleteOne({_id:id},(err,usuario)=>{
+            Publicacion.deleteOne({_id:id},(err,publicacion)=>{
                 if(err){
                     return res.status(500).send({
-                        status: 'Usuario no encontrado'
+                        status: 'Publicacion no encontrada'
                     })
                 }
-                if (!usuario){
+                if (!publicacion){
                     return res.status(500).send({
-                        status: 'No existe el usuario'
+                        status: 'No existe la publicacion'
                     })
                 }
                 return res.status(200).send({
-                    status: 'Usuario eliminado',
-                    usuario
+                    status: 'Publicacion eliminada',
+                    publicacion
                 })
             })
         }
     },
-    update_usuario:(req,res)=>{
+    update_publicacion:(req,res)=>{
         // 1. Recoger los datos
         // 2. Validar los datos
         // 3. Buscar y actualizar
-        const {usuario,correo,contrasena,nombre,url_foto_perfil}=req.body;
+        const {url,propietario,descripcion,tag,es_publico}=req.body;
         const id=req.params.id;
         try{
-            if (usuario.length>0 && correo.length>0 && contrasena.length>0 && nombre.length>0){
-                Usuario.updateOne({_id:id},{usuario,correo,contrasena,nombre,url_foto_perfil},{new:true},(err,usuario)=>{
+            if (url.length>0 && propietario.length>0 && descripcion.length>0 && tag.length>0 && es_publico!=null){
+                Publicacion.updateOne({_id:id},{url,propietario,descripcion,tag,es_publico},{new:true},(err,publicacion)=>{
                     if (err){
                         return res.status(500).send({
-                            status: 'No se encontró el usuario'
+                            status: 'No se encontró la publicacion'
                         })
                     }
                     return res.status(200).send({
-                        status: 'Usuario actualizado',
-                        usuario
+                        status: 'Publicacion actualizada',
+                        publicacion
                     })
                 })
             } else {
