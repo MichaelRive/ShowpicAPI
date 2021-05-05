@@ -1,7 +1,30 @@
 const validator = require('validator');
-const Usuario=require('../models/UsuarioModel');
-const controller={
-    datosusuarios:(req,res)=>{
+const UsuarioModel = require('../models/UsuarioModel');
+const Usuario = require('../models/UsuarioModel');
+const controller = {
+    renderRegistro: (req, res) => {
+        res.render('/registrouser');
+    },
+    registro: (req, res) => {
+        const { correo, usuario, pass, pass2 } = req.body;
+        if (pass != pass2) {
+            res.send('No exitoso');
+
+        } else {
+            let newUser= new UsuarioModel({usuario, correo, pass});
+            await newUser.save();
+            res.redirect('/showpic');
+            res.send('Registro exitoso');
+        }
+
+    },
+    renderInicio: (req, res) => {
+        res.render('/iniciouser')
+    },
+    inicio: (req, res) => {
+        res.send('Inicio exitoso');
+    },
+    datosusuarios: (req, res) => {
         console.log("Soy el controlador fiuuuuuu");
         return res.status(200).send({
             usuario: 'wenas',
@@ -11,7 +34,7 @@ const controller={
             url_foto_perfil: 'hola.png'
         })
     },
-    save:(req,res)=>{
+    save: (req, res) => {
         /*
         1. Recoger los datos
         2. Validar los datos
@@ -19,27 +42,27 @@ const controller={
         4. Guardar el objeto
         5. Se devuelve una respuesta
         */
-        const {usuario,correo,contrasena,nombre,url_foto_perfil}=req.body;
+        const { usuario, correo, contrasena, nombre, url_foto_perfil } = req.body;
         try {
-            if (usuario.length>0 && correo.length>0 && contrasena.length>0 && nombre.length>0 && validator.isEmail(correo)){
+            if (usuario.length > 0 && correo.length > 0 && contrasena.length > 0 && nombre.length > 0 && validator.isEmail(correo)) {
                 const UsuarioNuevo = new Usuario();
-                UsuarioNuevo.usuario=usuario;
-                UsuarioNuevo.correo=correo;
-                UsuarioNuevo.contrasena=contrasena;
-                UsuarioNuevo.nombre=nombre;
-                UsuarioNuevo.url_foto_perfil=url_foto_perfil;
-                UsuarioNuevo.save((err,usuario)=>{
-                    if (err){
+                UsuarioNuevo.usuario = usuario;
+                UsuarioNuevo.correo = correo;
+                UsuarioNuevo.contrasena = contrasena;
+                UsuarioNuevo.nombre = nombre;
+                UsuarioNuevo.url_foto_perfil = url_foto_perfil;
+                UsuarioNuevo.save((err, usuario) => {
+                    if (err) {
                         return res.status(400).send({
-                            status:'Usuario o correo ya registrado'
+                            status: 'Usuario o correo ya registrado'
                         })
-                    } if (!usuario){
+                    } if (!usuario) {
                         return res.status(400).send({
-                            status:'Faltan datos'
+                            status: 'Faltan datos'
                         })
-                    }else {
+                    } else {
                         return res.status(200).send({
-                           status: 'Usuario registrado correctamente'
+                            status: 'Usuario registrado correctamente'
                         })
                     }
                 })
@@ -48,18 +71,18 @@ const controller={
                     status: 'Faltan datos'
                 })
             }
-        } catch(error){
+        } catch (error) {
             console.log("Error");
             return res.status(401).send({
                 status: 'F'
             })
         }
-        
-       
+
+
     },
-    get_usuarios:(req,res)=>{
-        Usuario.find({}).sort('_id').exec((err,usuarios)=>{
-            if(err){
+    get_usuarios: (req, res) => {
+        Usuario.find({}).sort('_id').exec((err, usuarios) => {
+            if (err) {
                 return res.status(400).send({
                     status: 'Error al buscar usuarios'
                 })
@@ -69,22 +92,22 @@ const controller={
             })
         })
     },
-    get_usuario_por_id:(req,res)=>{
+    get_usuario_por_id: (req, res) => {
         // Recoger el id de la URL
-        const id=req.params.id;
-        if (!id || id==null){
+        const id = req.params.id;
+        if (!id || id == null) {
             return res.status(500).send({
                 status: 'Id no extraido correctamente'
             })
         } else {
-             // Hacemos la busqueda
-            Usuario.findById(id,(err,usuario)=>{
-                if(err){
+            // Hacemos la busqueda
+            Usuario.findById(id, (err, usuario) => {
+                if (err) {
                     return res.status(500).send({
                         status: 'Usuario no encontrado'
                     })
                 }
-                if (!usuario){
+                if (!usuario) {
                     return res.status(500).send({
                         status: 'No existe el usuario'
                     })
@@ -96,20 +119,20 @@ const controller={
             })
         }
     },
-    delete_usuario:(req,res)=>{
-        const id=req.params.id;
-        if (!id || id==null){
+    delete_usuario: (req, res) => {
+        const id = req.params.id;
+        if (!id || id == null) {
             return res.status(500).send({
                 status: 'Id no extraido correctamente'
             })
         } else {
-            Usuario.deleteOne({_id:id},(err,usuario)=>{
-                if(err){
+            Usuario.deleteOne({ _id: id }, (err, usuario) => {
+                if (err) {
                     return res.status(500).send({
                         status: 'Usuario no encontrado'
                     })
                 }
-                if (!usuario){
+                if (!usuario) {
                     return res.status(500).send({
                         status: 'No existe el usuario'
                     })
@@ -121,16 +144,16 @@ const controller={
             })
         }
     },
-    update_usuario:(req,res)=>{
+    update_usuario: (req, res) => {
         // 1. Recoger los datos
         // 2. Validar los datos
         // 3. Buscar y actualizar
-        const {usuario,correo,contrasena,nombre,url_foto_perfil}=req.body;
-        const id=req.params.id;
-        try{
-            if (usuario.length>0 && correo.length>0 && contrasena.length>0 && nombre.length>0){
-                Usuario.updateOne({_id:id},{usuario,correo,contrasena,nombre,url_foto_perfil},{new:true},(err,usuario)=>{
-                    if (err){
+        const { usuario, correo, contrasena, nombre, url_foto_perfil } = req.body;
+        const id = req.params.id;
+        try {
+            if (usuario.length > 0 && correo.length > 0 && contrasena.length > 0 && nombre.length > 0) {
+                Usuario.updateOne({ _id: id }, { usuario, correo, contrasena, nombre, url_foto_perfil }, { new: true }, (err, usuario) => {
+                    if (err) {
                         return res.status(500).send({
                             status: 'No se encontró el usuario'
                         })
@@ -143,9 +166,9 @@ const controller={
             } else {
 
             }
-        }catch(error){
+        } catch (error) {
             console.log('Contacte al administrador')
         }
     }
 }
-module.exports=controller;
+module.exports = controller;

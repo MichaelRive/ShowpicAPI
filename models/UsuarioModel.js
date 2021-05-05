@@ -12,4 +12,4 @@ const UsuarioSchema=mongoose.Schema({
     nombre: String,
     url_foto_perfil: String
 });
-module.exports= mongoose.model('usuarios',UsuarioSchema);
+module.exports= mongoose.model('UsuarioModel',UsuarioSchema);
