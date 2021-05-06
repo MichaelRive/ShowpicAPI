@@ -12,7 +12,7 @@ const controller = {
 
         } else {
             let newUser= new UsuarioModel({usuario, correo, pass});
-            await newUser.save();
+            newUser.save();
             res.redirect('/showpic');
             res.send('Registro exitoso');
         }
@@ -22,7 +22,17 @@ const controller = {
         res.render('/iniciouser')
     },
     inicio: (req, res) => {
-        res.send('Inicio exitoso');
+        const { correo, pass} = req.body;
+
+        const usu= Usuario.findOne({correo});
+
+        if(!usu){
+          console.log('Falla');
+        }else{
+            window.location.replace('/showpic');
+            console.log('Inicio');
+        }
+
     },
     datosusuarios: (req, res) => {
         console.log("Soy el controlador fiuuuuuu");
