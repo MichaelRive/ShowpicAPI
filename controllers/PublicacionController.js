@@ -44,8 +44,7 @@ const controller={
                 status: 'F'
             })
         }
-    },
-    get_publicaciones:(req,res)=>{
+    },get_publicaciones:(req,res)=>{
         Publicacion.find({}).sort('_id').exec((err,publicaciones)=>{
             if(err){
                 return res.status(400).send({
@@ -55,6 +54,21 @@ const controller={
             return res.status(200).send({
                 publicaciones
             })
+        })
+    },
+    get_publicaciones_public:(req,res)=>{
+        Publicacion.find({es_publico: true}).sort('_id').exec((err,publicaciones)=>{
+            if(err){
+                return res.status(400).send({
+                    status: 'Error al buscar la publicacion'
+                })
+            } else{
+
+                return res.status(200).send({
+                    publicaciones
+                })
+            }
+            
         })
     },
     get_publicacion_por_id:(req,res)=>{

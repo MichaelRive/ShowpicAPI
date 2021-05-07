@@ -1,29 +1,6 @@
 const validator = require('validator');
-const UsuarioModel = require('../models/UsuarioModel');
 const Usuario = require('../models/UsuarioModel');
 const controller = {
-    renderRegistro: (req, res) => {
-        res.render('/registrouser');
-    },
-    registro: (req, res) => {
-        const { correo, usuario, pass, pass2 } = req.body;
-        if (pass != pass2) {
-            res.send('No exitoso');
-
-        } else {
-            let newUser= new UsuarioModel({usuario, correo, pass});
-            await newUser.save();
-            res.redirect('/showpic');
-            res.send('Registro exitoso');
-        }
-
-    },
-    renderInicio: (req, res) => {
-        res.render('/iniciouser')
-    },
-    inicio: (req, res) => {
-        res.send('Inicio exitoso');
-    },
     datosusuarios: (req, res) => {
         console.log("Soy el controlador fiuuuuuu");
         return res.status(200).send({
@@ -80,7 +57,7 @@ const controller = {
 
 
     },
-    get_usuarios: (req, res) => {
+    get_usuarios: async(req, res) => {
         Usuario.find({}).sort('_id').exec((err, usuarios) => {
             if (err) {
                 return res.status(400).send({
