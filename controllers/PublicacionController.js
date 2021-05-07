@@ -84,6 +84,28 @@ const controller={
             })
         }
     },
+    get_publicacion_por_propietario:(req,res)=>{
+        const id= req.params.id;
+        if(!id || id==null){
+            return res.status(500).send({
+                status: 'Propietario no extraido correctamente'
+            })
+        }else{
+            Publicacion.find({propietario: id}).sort('_id').exec((err,publicaciones)=>{
+                if(err){
+                    return res.status(400).send({
+                        status: 'Error al buscar publicacion'
+                    })
+                }else{
+                    return res.status(200).send({
+                        status: 'Busqueda correcta',
+                        publicaciones
+                    })
+                }
+            })
+        }
+    },
+
     delete_publicacion:(req,res)=>{
         const id=req.params.id;
         if (!id || id==null){
