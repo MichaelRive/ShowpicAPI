@@ -6,4 +6,5 @@ router.get('/listar_usuarios',UsuarioController.get_usuarios);
 router.get('/buscar_usuario/:id',UsuarioController.get_usuario_por_id);
 router.delete('/eliminar_usuario/:id',UsuarioController.delete_usuario);
 router.put('/actualizar_usuario/:id',UsuarioController.update_usuario);
+router.get('/buscar_usuario_por_correo/:correo',UsuarioController.get_usuario_por_correo);
 module.exports=router;

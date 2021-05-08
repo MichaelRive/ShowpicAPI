@@ -69,6 +69,22 @@ const controller = {
             })
         })
     },
+    get_usuario_por_correo: async(req,res) => {
+        const correo = req.params.correo
+        Usuario.findOne({correo: correo}).exec((err,usuario)=>{
+            if(err){
+                return res.status(400).send({
+                    status: 'Error al buscar usuario'
+                })
+            }else{
+                return res.status(200).send({
+                    status: 'Usuario encontrado',
+                    usuario
+                })
+            }
+        })
+    },
+
     get_usuario_por_id: (req, res) => {
         // Recoger el id de la URL
         const id = req.params.id;
