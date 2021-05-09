@@ -10,4 +10,5 @@ router.get('/buscar_publicacion/:id',PublicacionController.get_publicacion_por_i
 router.delete('/eliminar_publicacion/:id',PublicacionController.delete_publicacion);
 router.put('/actualizar_publicacion/:id',PublicacionController.update_publicacion);
 router.post('/upload_image/:id',md_upload,PublicacionController.upload);
+router.get('/buscar_publicacion_propietario/:id',PublicacionController.get_publicacion_por_propietario);
 module.exports=router;
