@@ -191,6 +191,7 @@ const controller = {
                 })
             } else {
                 const id = req.params.id;
+                console.log(req.body);
                 const { descripcion, tag, es_publico } = req.body;
                 try {
                     if (descripcion.length > 0 && tag.length > 0 && es_publico != null) {
@@ -230,6 +231,18 @@ const controller = {
                 }
             }
         }
+    }, getImage:(req,res)=>{
+        const file=req.params.image;
+        const path_file='./upload/images/'+file;
+        fs.stat(path_file,(error,exit)=>{
+            if(error){
+                return res.status(404).send({
+                    status:'error',
+                    message:'Imagen no encontrada'
+                })
+            }
+            return res.sendFile(path.resolve(path_file));
+        })
     }
 }
 module.exports = controller;

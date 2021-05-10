@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const app=require('./app');
-const port=2021;
+const port=3900;
 
 mongoose.connect('mongodb+srv://michaelr:michaelr@showpicapi.o6f1u.mongodb.net/db',
  {useNewUrlParser: true, useUnifiedTopology: true}).then(()=>{
