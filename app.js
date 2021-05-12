@@ -6,6 +6,7 @@ const app=express();
 // Cargar los archivos y asignarles una ruta
 const UsuarioUrl=require('./urls/UsuarioUrl');
 const PublicacionUrl=require('./urls/PublicacionUrl');
+const SesionUrl = require('./urls/SesionUrl');
 //cors
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -20,5 +21,6 @@ app.use(express.json());
 // Añadir los prefijos
 app.use('/usuarios',UsuarioUrl);
 app.use('/publicaciones',PublicacionUrl);
+app.use('/sesion',SesionUrl)
 // Exportar los modulos
 module.exports=app;
